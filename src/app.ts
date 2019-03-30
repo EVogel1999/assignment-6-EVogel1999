@@ -28,6 +28,7 @@ function startServer(tasksDatastore: TasksDatastore) {
   // Get routes
   app.get('api/tasks/:id', async (req: Request, res: Response) => {
     const id: string = req.body.id;
+    // Validate if the task exists
     if (!id)
       res.status(400).send({
         parameterName: 'id',
@@ -36,6 +37,7 @@ function startServer(tasksDatastore: TasksDatastore) {
       });
     try {
       const task = await tasksDatastore.getTask(id);
+      // If task was found send it back, else send 404
       if (task)
         res.status(200).send(task);
       else
@@ -45,6 +47,7 @@ function startServer(tasksDatastore: TasksDatastore) {
           errorText: "No task exists with the given id"
          });
     } catch (e) {
+      // If any other error occurs throw 500
       res.status(500).send(e);
     }
   });
@@ -52,8 +55,10 @@ function startServer(tasksDatastore: TasksDatastore) {
   app.get('api/tasks', (req: Request, res: Response) => {
     try {
       const tasks = tasksDatastore.getTasks();
+      // If successfully got tasks, return them
       res.status(200).send(tasks);
     } catch (e) {
+      // If any other error occurs throw 500
       res.status(500).send(e);
     }
   });
@@ -62,7 +67,7 @@ function startServer(tasksDatastore: TasksDatastore) {
   app.post('api/tasks', async (req: Request, res: Response) => {
       const description: string = req.body.description;
 
-      // Check if description is there and not empty
+      // Validate if description is there and not empty
       if (!description || description.length == 0) {
           res.status(400).send({
             parameterName: 'description',
@@ -72,9 +77,10 @@ function startServer(tasksDatastore: TasksDatastore) {
       } else {
         try {
           const newTask = await tasksDatastore.createTask(description);
-          // const location = port + 'api/tasks/' + newTask._id;
+          // Send status and location header if successfully created task
           res.status(201);
         } catch (e) {
+          // If any other error occurs throw 500
           res.status(500).send(e);
         }
       }
