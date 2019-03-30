@@ -1,25 +1,23 @@
-
 import { Collection, MongoClient, ObjectId } from 'mongodb';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const MONGO_CONNECT = process.env.MONGO_CONNECT || '';
+const CONNECT_URL = process.env.MONGO_CONNECTION || '';
 
-export class TaskDataStore {
-    tasks: Collection;
+export class TasksDatastore {
+  tasks: Collection;
 
-    constructor(client: MongoClient) {
-        this.tasks = client.db('homework').collection('tasks');
-    }
-
-    static async connect() {
-        return new Promise<MongoClient>((resolve, reject) =>
-          MongoClient.connect(MONGO_CONNECT,
-            async (e: Error, client: MongoClient) => {
-                if (e)
-                    reject(e);
-                resolve(client);
-        }));
-    }
-
+  constructor(client: MongoClient) {
+    this.tasks = client.db('homework').collection('tasks');
+  }
+  
+  static async connect() {
+    return new Promise<MongoClient>((resolve, reject) =>
+      MongoClient.connect(CONNECT_URL, async (err: Error, client: MongoClient) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(client);
+      }));
+  }
 }

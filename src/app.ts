@@ -1,61 +1,61 @@
-
 import { MongoClient } from "mongodb";
-import { TaskDataStore } from "./datastore";
-import * as Express from 'express';
-import * as Morgan from 'morgan';
-import * as BodyParser from 'body-parser';
+import { TasksDatastore } from "./datastore";
+import * as express from 'express';
+import * as morgan from 'morgan';
 import { Request, Response } from 'express';
 
-TaskDataStore
+const bodyParser = require('body-parser');
+
+TasksDatastore
   .connect()
   .then((client: MongoClient) => {
-    const taskDataStore = new TaskDataStore(client);
-    startServer(taskDataStore);
+    const ordersDatastore = new TasksDatastore(client);
+    startServer(ordersDatastore);
   })
   .catch(e => console.error(e));
 
-function startServer(datastore: TaskDataStore) {
-    const app = Express();
+function startServer(ordersDatastore: TasksDatastore) {
+  const app = express();
 
-    app.use(Morgan('dev'));
+  app.use(morgan('dev'));
 
-    app.use(BodyParser.urlencoded({ extended: true }));
-    app.use(BodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
 
-    // Get routes
-    app.get('api/tasks/:id', (req: Request, res: Response) => {
+  const port = process.env.PORT || 3000;
 
-    });
+  // Get routes
+  app.get('api/tasks/:id', (req: Request, res: Response) => {
 
-    app.get('api/tasks', (req: Request, res: Response) => {
+  });
 
-    });
+  app.get('api/tasks', (req: Request, res: Response) => {
 
-    // Post routes
-    app.post('api/tasks', (req: Request, res: Response) => {
-        const description: string = req.body.description;
+  });
 
-        // Check if description is there and not empty
-        if (!description || description.length == 0) {
-            const e = {
-                parameterName: 'Description',
-                parameterValue: description,
-                errorText: 'Task description must have a value and not empty'
-            };
-            res.sendStatus(400).json({ e });
-        } else {
+  // Post routes
+  app.post('api/tasks', (req: Request, res: Response) => {
+      const description: string = req.body.description;
 
-        }
-    });
+      // Check if description is there and not empty
+      if (!description || description.length == 0) {
+          const e = {
+              parameterName: 'Description',
+              parameterValue: description,
+              errorText: 'Task description must have a value and not empty'
+          };
+          res.sendStatus(400).json({ e });
+      } else {
 
-    // Patch routes
-    app.patch('api/tasks/:id', (req: Request, res: Response) => {
+      }
+  });
 
-    });
+  // Patch routes
+  app.patch('api/tasks/:id', (req: Request, res: Response) => {
 
-    const port = process.env.PORT || 3000;
+  });
 
-    app.listen(port, () => {
-        console.log(`Task API is listening on port ${port}`);
-    })
+  app.listen(port, () => {
+    console.log(`Tasks API is running on port ${port}`);
+  });
 }
