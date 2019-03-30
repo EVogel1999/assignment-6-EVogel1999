@@ -22,6 +22,15 @@ function startServer(datastore: TaskDataStore) {
     app.use(BodyParser.urlencoded({ extended: true }));
     app.use(BodyParser.json());
 
+    // Get routes
+
+    // Post routes
+
+    // Put routes
+
+    // Delete routes
+
+
     const port = process.env.PORT || 3000;
 
     app.listen(port, () => {

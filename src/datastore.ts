@@ -9,7 +9,7 @@ export class TaskDataStore {
     tasks: Collection;
 
     constructor(client: MongoClient) {
-        this.tasks = client.db().collection('tasks');
+        this.tasks = client.db('homework').collection('tasks');
     }
 
     static async connect() {
