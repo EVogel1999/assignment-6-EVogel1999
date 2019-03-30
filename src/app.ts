@@ -48,10 +48,10 @@ function startServer(datastore: TaskDataStore) {
         }
     });
 
-    // Put routes
+    // Patch routes
+    app.patch('api/tasks/:id', (req: Request, res: Response) => {
 
-    // Delete routes
-
+    });
 
     const port = process.env.PORT || 3000;
 
