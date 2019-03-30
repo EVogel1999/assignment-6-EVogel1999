@@ -27,10 +27,11 @@ export class TasksDatastore {
       isComplete: false,
       dateCreated: new Date()
     };
-    try {
-      await this.tasks.insertOne({ task });
-    } catch (e) {
-      throw e;
-    }
+
+    await this.tasks.insertOne({ task });
+  }
+
+  async getTask(id: string) {
+    return await this.tasks.findOne({ _id: new ObjectId(id) });
   }
 }

@@ -25,8 +25,27 @@ function startServer(tasksDatastore: TasksDatastore) {
   const port = process.env.PORT || 3000;
 
   // Get routes
-  app.get('api/tasks/:id', (req: Request, res: Response) => {
-
+  app.get('api/tasks/:id', async (req: Request, res: Response) => {
+    const id: string = req.body.id;
+    if (!id)
+      res.status(400).send({
+        parameterName: 'id',
+        parameterValue: id,
+        errorText: 'Task ID is required'
+      });
+    try {
+      const task = await tasksDatastore.getTask(id);
+      if (task)
+        res.status(200).send(task);
+      else
+        res.status(404).send({
+          parameterName: "id",
+          parameterValue: id,
+          errorText: "No task exists with the given id"
+         });
+    } catch (e) {
+      res.status(500).send(e);
+    }
   });
 
   app.get('api/tasks', (req: Request, res: Response) => {
@@ -39,12 +58,11 @@ function startServer(tasksDatastore: TasksDatastore) {
 
       // Check if description is there and not empty
       if (!description || description.length == 0) {
-          const e = {
-              parameterName: 'Description',
-              parameterValue: description,
-              errorText: 'Task description must have a value and not empty'
-          };
-          res.status(400).send(e);
+          res.status(400).send({
+            parameterName: 'description',
+            parameterValue: description,
+            errorText: 'Task description must have a value and not empty'
+        });
       } else {
         try {
           const newTask = await tasksDatastore.createTask(description);
