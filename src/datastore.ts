@@ -20,4 +20,17 @@ export class TasksDatastore {
         resolve(client);
       }));
   }
+
+  async createTask(description: string) {
+    const task = {
+      description: description,
+      isComplete: false,
+      dateCreated: new Date()
+    };
+    try {
+      await this.tasks.insertOne({ task });
+    } catch (e) {
+      throw e;
+    }
+  }
 }

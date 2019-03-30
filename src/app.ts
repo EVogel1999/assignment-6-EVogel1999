@@ -14,7 +14,7 @@ TasksDatastore
   })
   .catch(e => console.error(e));
 
-function startServer(ordersDatastore: TasksDatastore) {
+function startServer(tasksDatastore: TasksDatastore) {
   const app = express();
 
   app.use(morgan('dev'));
@@ -34,7 +34,7 @@ function startServer(ordersDatastore: TasksDatastore) {
   });
 
   // Post routes
-  app.post('api/tasks', (req: Request, res: Response) => {
+  app.post('api/tasks', async (req: Request, res: Response) => {
       const description: string = req.body.description;
 
       // Check if description is there and not empty
@@ -44,9 +44,15 @@ function startServer(ordersDatastore: TasksDatastore) {
               parameterValue: description,
               errorText: 'Task description must have a value and not empty'
           };
-          res.sendStatus(400).json({ e });
+          res.status(400).send(e);
       } else {
-
+        try {
+          const newTask = await tasksDatastore.createTask(description);
+          // const location = port + 'api/tasks/' + newTask._id;
+          res.status(201);
+        } catch (e) {
+          res.status(500).send(e);
+        }
       }
   });
 
