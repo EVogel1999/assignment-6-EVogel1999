@@ -23,6 +23,9 @@ function startServer(datastore: TaskDataStore) {
     app.use(BodyParser.json());
 
     // Get routes
+    app.get('api/tasks/:id', (req: Request, res: Response) => {
+
+    });
 
     // Post routes
     app.post('api/tasks', (req: Request, res: Response) => {
@@ -37,7 +40,7 @@ function startServer(datastore: TaskDataStore) {
             };
             res.sendStatus(400).json({ e });
         } else {
-            
+
         }
     });
 
