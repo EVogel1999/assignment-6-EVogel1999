@@ -25,6 +25,21 @@ function startServer(datastore: TaskDataStore) {
     // Get routes
 
     // Post routes
+    app.post('api/tasks', (req: Request, res: Response) => {
+        const description: string = req.body.description;
+
+        // Check if description is there and not empty
+        if (!description || description.length == 0) {
+            const e = {
+                parameterName: 'Description',
+                parameterValue: description,
+                errorText: 'Task description must have a value and not empty'
+            };
+            res.sendStatus(400).json({ e });
+        } else {
+            
+        }
+    });
 
     // Put routes
 
