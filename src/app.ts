@@ -23,4 +23,8 @@ function startServer(datastore: TaskDataStore) {
     app.use(BodyParser.json());
 
     const port = process.env.PORT || 3000;
+
+    app.listen(port, () => {
+        console.log(`Task API is listening on port ${port}`);
+    })
 }
