@@ -27,6 +27,10 @@ function startServer(datastore: TaskDataStore) {
 
     });
 
+    app.get('api/tasks', (req: Request, res: Response) => {
+
+    });
+
     // Post routes
     app.post('api/tasks', (req: Request, res: Response) => {
         const description: string = req.body.description;
