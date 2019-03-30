@@ -1,3 +1,4 @@
+
 import { Collection, MongoClient, ObjectId } from 'mongodb';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -33,5 +34,9 @@ export class TasksDatastore {
 
   async getTask(id: string) {
     return await this.tasks.findOne({ _id: new ObjectId(id) });
+  }
+
+  async getTasks() {
+    return await this.tasks.find({}).toArray();
   }
 }

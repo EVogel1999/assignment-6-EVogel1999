@@ -1,3 +1,4 @@
+
 import { MongoClient } from "mongodb";
 import { TasksDatastore } from "./datastore";
 import * as express from 'express';
@@ -49,7 +50,12 @@ function startServer(tasksDatastore: TasksDatastore) {
   });
 
   app.get('api/tasks', (req: Request, res: Response) => {
-
+    try {
+      const tasks = tasksDatastore.getTasks();
+      res.status(200).send(tasks);
+    } catch (e) {
+      res.status(500).send(e);
+    }
   });
 
   // Post routes
