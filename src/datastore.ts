@@ -5,7 +5,7 @@ dotenv.config();
 
 const MONGO_CONNECT = process.env.MONGO_CONNECT || '';
 
-export class DataStore {
+export class TaskDataStore {
     tasks: Collection;
 
     constructor(client: MongoClient) {
