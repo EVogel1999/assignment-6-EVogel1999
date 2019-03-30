@@ -1,9 +1,9 @@
 
 import { MongoClient } from "mongodb";
 import { TaskDataStore } from "./datastore";
-import * as express from 'express';
-import * as morgan from 'morgan';
-import * as bodyParser from 'body-parser';
+import * as Express from 'express';
+import * as Morgan from 'morgan';
+import * as BodyParser from 'body-parser';
 import { Request, Response } from 'express';
 
 TaskDataStore
@@ -15,5 +15,12 @@ TaskDataStore
   .catch(e => console.error(e));
 
 function startServer(datastore: TaskDataStore) {
+    const app = Express();
 
+    app.use(Morgan('dev'));
+
+    app.use(BodyParser.urlencoded({ extended: true }));
+    app.use(BodyParser.json());
+
+    const port = process.env.PORT || 3000;
 }
