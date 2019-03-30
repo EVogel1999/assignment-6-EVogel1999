@@ -1,0 +1,20 @@
+{
+  "name": "assignment-6-EVogel1999",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tucosc484/assignment-6-EVogel1999.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tucosc484/assignment-6-EVogel1999/issues"
+  },
+  "homepage": "https://github.com/tucosc484/assignment-6-EVogel1999#readme"
+}
