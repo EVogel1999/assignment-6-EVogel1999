@@ -39,4 +39,13 @@ export class TasksDatastore {
   async getTasks() {
     return await this.tasks.find({}).toArray();
   }
+
+  async updateTask(id: string, params: {description: string, isComplete: boolean}) {
+    let task = await this.getTask(id);
+    task.description = params.description;
+    task.isComplete = params.isComplete;
+    if (params.isComplete)
+      task.dateCompleted = new Date();
+    this.tasks.findOneAndUpdate({ _id: new ObjectId(id) }, task);
+  }
 }

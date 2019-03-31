@@ -27,7 +27,7 @@ function startServer(tasksDatastore: TasksDatastore) {
 
   // Get routes
   app.get('api/tasks/:id', async (req: Request, res: Response) => {
-    const id: string = req.body.id;
+    const id: string = req.params.id;
     // Validate if the task exists
     if (!id)
       res.status(400).send({
@@ -35,6 +35,7 @@ function startServer(tasksDatastore: TasksDatastore) {
         parameterValue: id,
         errorText: 'Task ID is required'
       });
+
     try {
       const task = await tasksDatastore.getTask(id);
       // If task was found send it back, else send 404
@@ -45,7 +46,7 @@ function startServer(tasksDatastore: TasksDatastore) {
           parameterName: "id",
           parameterValue: id,
           errorText: "No task exists with the given id"
-         });
+        });
     } catch (e) {
       // If any other error occurs throw 500
       res.status(500).send(e);
@@ -73,22 +74,50 @@ function startServer(tasksDatastore: TasksDatastore) {
             parameterName: 'description',
             parameterValue: description,
             errorText: 'Task description must have a value and not empty'
-        });
-      } else {
-        try {
-          const newTask = await tasksDatastore.createTask(description);
-          // Send status and location header if successfully created task
-          res.status(201);
-        } catch (e) {
-          // If any other error occurs throw 500
-          res.status(500).send(e);
-        }
+          });
+      }
+
+      try {
+        const newTask = await tasksDatastore.createTask(description);
+        // Send status and location header if successfully created task
+        res.status(201);
+      } catch (e) {
+        // If any other error occurs throw 500
+        res.status(500).send(e);
       }
   });
 
   // Patch routes
   app.patch('api/tasks/:id', (req: Request, res: Response) => {
+    const id = req.params.id;
+    const description = req.body.description;
+    const isComplete = req.body.isComplete;
 
+    // Validation for the three values
+    if (!id)
+      res.status(400).send({
+        parameterName: 'id',
+        parameterValue: id,
+        errorText: 'Task ID is required'
+      });
+    if (!description || description.length == 0)
+      res.status(400).send({
+        parameterName: 'description',
+        parameterValue: description,
+        errorText: 'Task description must have a value and not empty'
+      });
+    if (!isComplete)
+      res.status(400).send({
+        parameterName: 'isComplete',
+        parameterValue: isComplete,
+        errorText: 'Task isComplete property is required'
+      });
+
+    try {
+
+    } catch (e) {
+      res.status(500).send(e);
+    }
   });
 
   app.listen(port, () => {
