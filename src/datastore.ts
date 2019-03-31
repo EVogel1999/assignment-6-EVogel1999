@@ -28,8 +28,8 @@ export class TasksDatastore {
       isComplete: false,
       dateCreated: new Date()
     };
-
-    await this.tasks.insertOne({ task });
+    await this.tasks.insertOne(task);
+    return task;
   }
 
   async getTask(id: string) {
@@ -37,7 +37,7 @@ export class TasksDatastore {
   }
 
   async getTasks() {
-    return await this.tasks.find({}).toArray();
+    return await this.tasks.find({});
   }
 
   async updateTask(id: string, params: {description: string, isComplete: boolean}) {
@@ -46,6 +46,6 @@ export class TasksDatastore {
     task.isComplete = params.isComplete;
     if (params.isComplete)
       task.dateCompleted = new Date();
-    this.tasks.findOneAndUpdate({ _id: new ObjectId(id) }, task);
+    await this.tasks.findOneAndUpdate({ _id: new ObjectId(id) }, task);
   }
 }

@@ -26,7 +26,7 @@ function startServer(tasksDatastore: TasksDatastore) {
   const port = process.env.PORT || 3000;
 
   // Get routes
-  app.get('api/tasks/:id', async (req: Request, res: Response) => {
+  app.get('/api/tasks/:id', async (req: Request, res: Response) => {
     const id: string = req.params.id;
     // Validate if the task exists
     if (!id)
@@ -53,7 +53,7 @@ function startServer(tasksDatastore: TasksDatastore) {
     }
   });
 
-  app.get('api/tasks', (req: Request, res: Response) => {
+  app.get('/api/tasks', (req: Request, res: Response) => {
     try {
       const tasks = tasksDatastore.getTasks();
       // If successfully got tasks, return them
@@ -65,7 +65,7 @@ function startServer(tasksDatastore: TasksDatastore) {
   });
 
   // Post routes
-  app.post('api/tasks', async (req: Request, res: Response) => {
+  app.post('/api/tasks', async (req: Request, res: Response) => {
       const description: string = req.body.description;
 
       // Validate if description is there and not empty
@@ -88,7 +88,7 @@ function startServer(tasksDatastore: TasksDatastore) {
   });
 
   // Patch routes
-  app.patch('api/tasks/:id', (req: Request, res: Response) => {
+  app.patch('/api/tasks/:id', async (req: Request, res: Response) => {
     const id = req.params.id;
     const description = req.body.description;
     const isComplete = req.body.isComplete;
@@ -114,7 +114,8 @@ function startServer(tasksDatastore: TasksDatastore) {
       });
 
     try {
-
+      await tasksDatastore.updateTask(id, {description: description, isComplete: isComplete});
+      res.status(204);
     } catch (e) {
       res.status(500).send(e);
     }
