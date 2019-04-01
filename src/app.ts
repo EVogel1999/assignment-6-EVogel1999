@@ -25,6 +25,11 @@ function startServer(tasksDatastore: TasksDatastore) {
 
   const port = process.env.PORT || 3000;
 
+  if (port !== 3000)
+    process.env.BASEURL = port;
+
+  const baseURL = process.env.BASEURL;
+
   // Get routes
   app.get('/api/tasks/:id', async (req: Request, res: Response) => {
     const id: string = req.params.id;
@@ -79,8 +84,10 @@ function startServer(tasksDatastore: TasksDatastore) {
 
       try {
         const newTask = await tasksDatastore.createTask(description);
+        console.log(newTask);
         // Send status and location header if successfully created task
-        res.status(201);
+        res.setHeader('Location', baseURL + 'api/tasks/' + newTask._id);
+        res.sendStatus(201);
       } catch (e) {
         // If any other error occurs throw 500
         res.status(500).send(e);
@@ -115,7 +122,7 @@ function startServer(tasksDatastore: TasksDatastore) {
 
     try {
       await tasksDatastore.updateTask(id, {description: description, isComplete: isComplete});
-      res.status(204);
+      res.sendStatus(204);
     } catch (e) {
       res.status(500).send(e);
     }

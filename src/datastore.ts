@@ -29,11 +29,15 @@ export class TasksDatastore {
       dateCreated: new Date()
     };
     await this.tasks.insertOne(task);
-    return task;
+    return await this.getTaskByData(task.description, task.isComplete, task.dateCreated);
   }
 
   async getTask(id: string) {
     return await this.tasks.findOne({ _id: new ObjectId(id) });
+  }
+
+  async getTaskByData(description: string, isComplete: boolean, dateCreated: Date) {
+    return await this.tasks.findOne({ description: description, isComplete: isComplete, dateCreated: dateCreated });
   }
 
   async getTasks() {
