@@ -50,6 +50,13 @@ export class TasksDatastore {
     task.isComplete = params.isComplete;
     if (params.isComplete)
       task.dateCompleted = new Date();
-    await this.tasks.findOneAndUpdate({ _id: new ObjectId(id) }, task);
+    else
+      task.dateCompleted = null;
+    await this.tasks.findOneAndUpdate({ _id: new ObjectId(id) },
+      { $set: {
+        "description": task.description,
+        "isComplete": task.isComplete,
+        "dateCompleted": task.dateCompleted
+      }});
   }
 }

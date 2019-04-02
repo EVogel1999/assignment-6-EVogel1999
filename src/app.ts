@@ -84,7 +84,6 @@ function startServer(tasksDatastore: TasksDatastore) {
 
       try {
         const newTask = await tasksDatastore.createTask(description);
-        console.log(newTask);
         // Send status and location header if successfully created task
         res.setHeader('Location', baseURL + 'api/tasks/' + newTask._id);
         res.sendStatus(201);
@@ -113,7 +112,7 @@ function startServer(tasksDatastore: TasksDatastore) {
         parameterValue: description,
         errorText: 'Task description must have a value and not empty'
       });
-    if (!isComplete)
+    if (isComplete === undefined)
       res.status(400).send({
         parameterName: 'isComplete',
         parameterValue: isComplete,
