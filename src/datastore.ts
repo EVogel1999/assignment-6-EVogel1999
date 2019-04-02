@@ -41,7 +41,7 @@ export class TasksDatastore {
   }
 
   async getTasks() {
-    return await this.tasks.find({});
+    return await this.tasks.find({}).toArray();
   }
 
   async updateTask(id: string, params: {description: string, isComplete: boolean}) {

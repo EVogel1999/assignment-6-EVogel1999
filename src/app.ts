@@ -58,9 +58,9 @@ function startServer(tasksDatastore: TasksDatastore) {
     }
   });
 
-  app.get('/api/tasks', (req: Request, res: Response) => {
+  app.get('/api/tasks', async (req: Request, res: Response) => {
     try {
-      const tasks = tasksDatastore.getTasks();
+      const tasks = await tasksDatastore.getTasks();
       // If successfully got tasks, return them
       res.status(200).send(tasks);
     } catch (e) {
