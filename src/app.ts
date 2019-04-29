@@ -136,6 +136,16 @@ function startServer(tasksDatastore: TasksDatastore) {
     }
   });
 
+  app.delete('/api/tasks/:id', async (req: Request, res: Response) => {
+    const id = req.params.id;
+    try {
+      await tasksDatastore.deleteTask(id);
+      res.sendStatus(204);
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  })
+
   app.listen(port, () => {
     console.log(`Tasks API is running on port ${port}`);
   });

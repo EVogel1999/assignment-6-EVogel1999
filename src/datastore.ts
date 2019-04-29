@@ -59,4 +59,8 @@ export class TasksDatastore {
         "dateCompleted": task.dateCompleted
       }});
   }
+
+  async deleteTask(id: string) {
+    await this.tasks.findOneAndDelete({ _id: new ObjectId(id) });
+  }
 }
