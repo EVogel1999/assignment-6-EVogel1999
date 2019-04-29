@@ -25,10 +25,19 @@ function startServer(tasksDatastore: TasksDatastore) {
 
   const port = process.env.PORT || 3000;
 
-  if (port !== 3000)
-    process.env.BASEURL = port;
-
-  const baseURL = process.env.BASEURL;
+  app.use((req, res, next) => {
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    // Pass to next layer of middleware
+    next();
+  });
 
   // Get routes
   app.get('/api/tasks/:id', async (req: Request, res: Response) => {
@@ -85,7 +94,7 @@ function startServer(tasksDatastore: TasksDatastore) {
       try {
         const newTask = await tasksDatastore.createTask(description);
         // Send status and location header if successfully created task
-        res.setHeader('Location', baseURL + 'api/tasks/' + newTask._id);
+        res.setHeader('Location', port + 'api/tasks/' + newTask._id);
         res.sendStatus(201);
       } catch (e) {
         // If any other error occurs throw 500
